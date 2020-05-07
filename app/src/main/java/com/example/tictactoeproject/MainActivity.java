@@ -20,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btnBottomRight;
     private Button btnNewGame;
     private TextView playerTurnText;
+    private TextView numTilesChosenText;
     private boolean playerXTurn = true;
+    boolean isThereAWinner;
     private int xWins;
     private int oWins;
     private int numTilesChosen;
@@ -42,45 +44,51 @@ public class MainActivity extends AppCompatActivity {
         btnBottomRight = findViewById(R.id.btnBottomRight);
         btnNewGame = findViewById(R.id.btnNewGame);
         playerTurnText = findViewById(R.id.playerTurnText);
-
     }
 
     public void onClick(View v) {
-
-
         if (v == btnTopLeft && isTileEmpty(btnTopLeft)) {
+            numTilesChosen++;
             changePlayerTurn();
             btnTopLeft.setText(printXO());
         }
         else if (v == btnTopMid && isTileEmpty(btnTopMid)) {
+            numTilesChosen++;
             changePlayerTurn();
             btnTopMid.setText(printXO());
         }
         else if (v == btnTopRight && isTileEmpty(btnTopRight)) {
+            numTilesChosen++;
             changePlayerTurn();
             btnTopRight.setText(printXO());
         }
         else if (v == btnMidLeft && isTileEmpty(btnMidLeft)) {
+            numTilesChosen++;
             changePlayerTurn();
             btnMidLeft.setText(printXO());
         }
         else if (v == btnMid && isTileEmpty(btnMid)) {
+            numTilesChosen++;
             changePlayerTurn();
             btnMid.setText(printXO());
         }
         else if (v == btnMidRight && isTileEmpty(btnMidRight)) {
+            numTilesChosen++;
             changePlayerTurn();
             btnMidRight.setText(printXO());
         }
         else if (v == btnBottomLeft && isTileEmpty(btnBottomLeft)) {
+            numTilesChosen++;
             changePlayerTurn();
             btnBottomLeft.setText(printXO());
         }
         else if (v == btnBottomMid && isTileEmpty(btnBottomMid)) {
+            numTilesChosen++;
             changePlayerTurn();
             btnBottomMid.setText(printXO());
         }
         else if (v == btnBottomRight && isTileEmpty(btnBottomRight)) {
+            numTilesChosen++;
             changePlayerTurn();
             btnBottomRight.setText(printXO());
         }
@@ -132,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
         btnBottomMid.setEnabled(true);
         btnBottomRight.setEnabled(true);
     }
+
     private void checkForWinner() {
-        boolean isThereAWinner = false;
         if (numTilesChosen <= 9) {
             // TOP row
             if (btnTopLeft.getText() == btnTopMid.getText() && btnTopMid.getText() == btnTopRight.getText() && btnTopLeft.getText() != "") {
@@ -150,12 +158,12 @@ public class MainActivity extends AppCompatActivity {
                 isThereAWinner = true;
                 updateWins();
                 disableTiles();
-            }   // TOPLEFT to BOTTOMRIGHT diagonal
+            }   // TOP LEFT to BOTTOM RIGHT diagonal
             else if (btnTopLeft.getText() == btnMid.getText() && btnMid.getText() == btnBottomRight.getText() && btnTopLeft.getText() != "") {
                 isThereAWinner = true;
                 updateWins();
                 disableTiles();
-            }   // BOTTOMLEFT to TOPRIGHT diagonal
+            }   // BOTTOM LEFT to TOP RIGHT diagonal
             else if (btnBottomLeft.getText() == btnMid.getText() && btnMid.getText() == btnTopRight.getText() && btnTopRight.getText() != "") {
                 isThereAWinner = true;
                 updateWins();
@@ -176,13 +184,15 @@ public class MainActivity extends AppCompatActivity {
                 updateWins();
                 disableTiles();
             }
-        }
-        else {
-            playerTurnText.setText("Tie Game");
-            disableTiles();
+            else if (numTilesChosen == 9) {
+                isThereAWinner = false;
+                playerTurnText.setText("Tie Game");
+                disableTiles();
+            }
         }
 
         if (isThereAWinner) {
+            isThereAWinner = false;
             if (printXO() == "X") {
                 playerTurnText.setText("Player " + printXO() + " total wins: " + xWins);
             }
@@ -190,11 +200,10 @@ public class MainActivity extends AppCompatActivity {
                 playerTurnText.setText("Player " + printXO() + " total wins: " + oWins);
             }
         }
-
     }
 
     private void updateWins(){
-        if (printXO() == "X"){
+        if (printXO().equals("X")){
             xWins++;
         }
         else {
@@ -210,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changePlayerTurn() {
-        numTilesChosen++;
         if (playerXTurn) {
             playerTurnText.setText("Player O's Turn");
             playerXTurn = false;
